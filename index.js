@@ -2,7 +2,8 @@ const http = require('http');
 const server = require('websocket').server;
 
 const httpServer = http.createServer(() => { });
-httpServer.listen(process.env.PORT || 1337, () => {
+let port = process.env.PORT || 1337;
+httpServer.listen(port, () => {
   console.log('Server listening at port 1337');
 });
 
