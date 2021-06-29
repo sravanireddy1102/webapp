@@ -4,7 +4,7 @@ xhtml, body {
 }
 
 body {
-  background-color:#01284a;
+  background-color:blueviolet; 
   padding: 8px;
 }
 
@@ -17,7 +17,8 @@ body {
 
 #code-input {
   border-radius: 3px;
-  margin-bottom: 20px;
+  margin-top:300px;
+  margin-bottom: 10px;
   padding: 5px;
   font-size: 16px;
   text-align: center;
