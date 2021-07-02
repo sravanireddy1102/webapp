@@ -20,8 +20,8 @@
     try {
       userMediaStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
       showChatRoom();
-      
-      signaling = new WebSocket('ws://127.0.0.1:1337');
+      const port= process.env.PORT || 1337;
+      signaling = new WebSocket('ws://127.0.0.1:${port}');
       peerConnection = createPeerConnection();
 
       addMessageHandler();
