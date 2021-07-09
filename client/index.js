@@ -15,6 +15,7 @@
   let userMediaStream;
   let displayMediaStream;
   let file;
+  let muted=false;
 
   const startChat = async () => {
     try {
@@ -222,7 +223,6 @@
   document.getElementById('share-file-button').addEventListener('click', () => {
     document.getElementById('select-file-dialog').style.display = 'block';
   });
-
   document.getElementById('cancel-button').addEventListener('click', () => {
     closeDialog();
   });
@@ -234,6 +234,30 @@
 
   document.getElementById('ok-button').addEventListener('click', () => {
     shareFile();
+  });
+  document.getElementById('mute-button').addEventListener('click', () => {
+    userMediaStream.getAudioTracks()[0].enabled = senders.find(sender => sender.track.kind === 'audio').enabled;
+    //mute button on click mutes the audio for every track.
+    document.getElementById('mute-button').style.display='none';
+    document.getElementById('unmute-button').style.display='inline';
+    
+  });
+  document.getElementById('unmute-button').addEventListener('click', () => {
+    senders.find(sender => sender.track.kind === 'audio').enabled = true;
+    //unmute button on click unmutes the audio for every track.
+    document.getElementById('mute-button').style.display='inline';
+    document.getElementById('unmute-button').style.display='none';
+  });
+  document.getElementById('hide-cam').addEventListener('click', () => {
+    userMediaStream.getVideoTracks()[0].enabled = false;
+    //hide-cam button on click hides the video for every track.
+    document.getElementById('hide-cam').style.display='none';
+    document.getElementById('show-cam').style.display='inline';
+  });
+  document.getElementById('show-cam').addEventListener('click', () => {
+    userMediaStream.getVideoTracks()[0].enabled = true;
+    document.getElementById('hide-cam').style.display='inline';
+    document.getElementById('show-cam').style.display='none';
   });
 })();
 
