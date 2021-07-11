@@ -37,15 +37,15 @@
   };
 
   const createPeerConnection = () => {
-    const pc = new RTCPeerConnection({
+    const peerConnection = new RTCPeerConnection({
       iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
     });
 
-    pc.onnegotiationneeded = async () => {
+    peerConnection.onnegotiationneeded = async () => {
       await createAndSendOffer();
     };
 
-    pc.onicecandidate = (iceEvent) => {
+    peerConnection.onicecandidate = (iceEvent) => {
       if (iceEvent && iceEvent.candidate) {
         sendMessage({
           message_type: MESSAGE_TYPE.CANDIDATE,
@@ -54,12 +54,12 @@
       }
     };
 
-    pc.ontrack = (event) => {
+    peerConnection.ontrack = (event) => {
       const video = document.getElementById('remote-view');
       video.srcObject = event.streams[0];
     };
 
-    pc.ondatachannel = (event) => {
+    peerConnection.ondatachannel = (event) => {
       const { channel } = event;
       channel.binaryType = 'arraybuffer';
 
@@ -86,7 +86,7 @@
       };
     };
 
-    return pc;
+    return peerConnection;
   };
 
   const addMessageHandler = () => {
@@ -98,6 +98,9 @@
       }
 
       const { message_type, content } = data;
+      if(message_type === MESSAGE_TYPE.TEXT) {
+        addMessageToConsole(content);
+      }
       try {
         if (message_type === MESSAGE_TYPE.CANDIDATE && content) {
           await peerConnection.addIceCandidate(content);
@@ -112,7 +115,7 @@
             });
           } else if (content.type === 'answer') {
             await peerConnection.setRemoteDescription(content);
-          } else {
+          } else{
             console.log('Unsupported SDP type.');
           }
         }
@@ -259,6 +262,31 @@
     document.getElementById('hide-cam').style.display='inline';
     document.getElementById('show-cam').style.display='none';
   });
+  const addMessageToConsole = message => {
+    const messageDiv = document.createElement('div');
+    messageDiv.textContent = message;
+    document.getElementById('console').appendChild(messageDiv);
+  }
+
+  document.addEventListener('click', async event => {
+    if (event.target.id === 'send') {
+      sendMessage({
+        message_type: MESSAGE_TYPE.TEXT,
+        content: document.getElementById('message').value,
+      });
+      document.getElementById('message').value = '';
+    }
+  });
+  document.getElementById('hangup-button').addEventListener('click', async () => {
+    await peerConnection.close();
+    closeDialog();
+    addMessageToConsole("You hung up.");
+    document.getElementById('hangup-button').disabled=true;
+  });
+    //release webcam
+  
+  
+    //closes the peer connection.
 })();
 
 

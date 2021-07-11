@@ -77,7 +77,17 @@ video {
   height: 100%;
   width: 100%;
 }
-
+#console {
+  overflow: scroll;
+  scrollbar-color: #000f1c;
+  height: 100%;
+  grid-column: 3;
+  background-color:white;
+  height: 50vh;
+  margin-top: 10px;
+  padding-top: 10px;
+  border: 1px solid #000f1c;
+}
 #view-buttons {
   opacity: 1;
   transition: opacity 0.5s ease-out;
